@@ -13,24 +13,24 @@ import java.util.Date;
  *
  * @author Christian Luijten <clui@oce.com>
  */
-class CleanupOldFiles implements FileVisitor<Path> {
+public final class CleanupOldFiles implements FileVisitor<Path> {
     private final FileTime olderThanTime;
 
-    CleanupOldFiles(Date time) {
-        this(FileTime.fromMillis(time.getTime()));
+    public CleanupOldFiles(final Date aOlderThanTime) {
+        this(FileTime.fromMillis(aOlderThanTime.getTime()));
     }
 
-    CleanupOldFiles(FileTime olderThanTime) {
-        this.olderThanTime = olderThanTime;
+    public CleanupOldFiles(final FileTime aOlderThanTime) {
+        this.olderThanTime = aOlderThanTime;
     }
 
     @Override
-    public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+    public FileVisitResult preVisitDirectory(final Path dir, final BasicFileAttributes attrs) throws IOException {
         return FileVisitResult.CONTINUE;
     }
 
     @Override
-    public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+    public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException {
         if (attrs.lastAccessTime().compareTo(olderThanTime) < 0) {
             System.out.println("Cleaning: " + file);
             Files.deleteIfExists(file);
@@ -39,12 +39,12 @@ class CleanupOldFiles implements FileVisitor<Path> {
     }
 
     @Override
-    public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
+    public FileVisitResult visitFileFailed(final Path file, final IOException exc) throws IOException {
         return FileVisitResult.CONTINUE;
     }
 
     @Override
-    public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+    public FileVisitResult postVisitDirectory(final Path dir, final IOException exc) throws IOException {
         return FileVisitResult.CONTINUE;
     }
 
